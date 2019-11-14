@@ -9,12 +9,20 @@ motor_1 = vex.Motor(vex.Ports.PORT1, vex.GearSetting.RATIO18_1, False)
 motor_2 = vex.Motor(vex.Ports.PORT2, vex.GearSetting.RATIO18_1, True)
 motor_3 = vex.Motor(vex.Ports.PORT3, vex.GearSetting.RATIO36_1, False)
 motor_4 = vex.Motor(vex.Ports.PORT4, vex.GearSetting.RATIO36_1, False)
+dt      = vex.Drivetrain(motor_1, motor_2, 319.1764, 272, vex.DistanceUnits.MM) #INTIALIZE DRIVE
 con     = vex.Controller(vex.ControllerType.PRIMARY)
 #endregion config
 
 FWD = DirectionType.FWD
 
-dt         = vex.Drivetrain(motor_1, motor_2, 319.1764, 272, vex.DistanceUnits.MM) #INTIALIZE DRIVE
+#T-Pose to asset dominance
+brain.screen.draw_rectangle(215,141,16,100) #RLeg
+brain.screen.draw_rectangle(231,141,16,100) #LLeg
+brain.screen.draw_rectangle(50, 50, 170, 17) #RArm
+brain.screen.draw_rectangle(242, 50, 170, 17) #LArm
+brain.screen.draw_circle(230,25,25) #head
+brain.screen.draw_rectangle(216,50,30,100) #body
+
 
 def forward_for(distance, velo):
     global dt
@@ -54,6 +62,7 @@ while con.buttonR1.pressing():
     	
     	# axis1: Linear Control
     	power = con.axis1.position()
+    	 
     	if power != 0:
     		motor_1_power = power
     	
