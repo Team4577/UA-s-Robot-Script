@@ -46,14 +46,18 @@ def forward(velo):
 
 
 #CONTROLLER REGION -------START
-while con.buttonR1.pressing():
+
+while True:
+    
     con.set_deadband(5)
     
     buttonr1_pressed = False
     motor_5_running = 0
     
+    while con.buttonR1.pressing():
+    
+    
     #region actions
-    while True:
     	motor_1_power = 0
     	motor_2_power = 0
     	motor_3_power = 0
@@ -79,11 +83,19 @@ while con.buttonR1.pressing():
     	if con.buttonL2.pressing():
     		motor_4_power = -100
     	
-
+    
     	
     	motor_1.spin(vex.DirectionType.FWD, motor_1_power)
     	motor_2.spin(vex.DirectionType.FWD, motor_2_power)
     	motor_3.spin(vex.DirectionType.FWD, motor_3_power)
     	motor_4.spin(vex.DirectionType.FWD, motor_4_power)
-	
-#endregion actions
+    
+    #endregion actions
+    
+    
+    while not con.buttonR1.pressing():
+        motor_1_power = 0
+    	motor_2_power = 0
+    	motor_3_power = 0
+    	motor_4_power = 0
+    	motor_5_power = 0
