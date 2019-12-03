@@ -5,10 +5,10 @@ from vex import *
 
 #region config
 brain   = vex.Brain()
-motor_1 = vex.Motor(vex.Ports.PORT1, vex.GearSetting.RATIO18_1, False)
-motor_2 = vex.Motor(vex.Ports.PORT2, vex.GearSetting.RATIO18_1, True)
-motor_3 = vex.Motor(vex.Ports.PORT3, vex.GearSetting.RATIO36_1, False)
-motor_4 = vex.Motor(vex.Ports.PORT4, vex.GearSetting.RATIO36_1, False)
+motor_1 = vex.Motor(vex.Ports.PORT20, vex.GearSetting.RATIO18_1, False)
+motor_2 = vex.Motor(vex.Ports.PORT11, vex.GearSetting.RATIO18_1, True)
+motor_3 = vex.Motor(vex.Ports.PORT19, vex.GearSetting.RATIO36_1, False)
+motor_4 = vex.Motor(vex.Ports.PORT12, vex.GearSetting.RATIO36_1, False)
 dt      = vex.Drivetrain(motor_1, motor_2, 319.1764, 272, vex.DistanceUnits.MM) #INTIALIZE DRIVE
 con     = vex.Controller(vex.ControllerType.PRIMARY)
 #endregion config
@@ -32,7 +32,7 @@ def forward(velo):
     global dt
     dt.drive(FWD, velo)
 
-
+forward_for(10, 10)
 
 #brain.screen.set_font(vex.Font.MONO_40)
 #for count in range(4):
