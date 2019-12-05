@@ -13,11 +13,16 @@ vex::motor motor_as2(vex::PORT2, vex::gearSetting::ratio36_1, true);
 vex::motor motor_ah1(vex::PORT8, vex::gearSetting::ratio36_1, false);
 vex::motor motor_ah2(vex::PORT3, vex::gearSetting::ratio36_1, true);
 
-vex::drivetrain dt(motor_l1, motor_r1, 319.1764, 272, vex::distanceUnits::mm);
+vex::motor_group leftwheels = motor_group(motor_l1, motor_l2);
+vex::motor_group rightwheels = motor_group(motor_r1, motor_r2);
+
+
+vex::drivetrain dt(leftwheels, rightwheels, 319.1764, 272, vex::distanceUnits::mm);
 
 vex::controller con(vex::controllerType::primary);
 
-dt.driveFor(vex::directionType::fwd, 100, vex::distanceUnits::cm, 10);
+//dt.driveFor(vex::directionType::fwd, 100, vex::distanceUnits::cm, 10);
+
 
 //#endregion config_globals
 
@@ -38,16 +43,18 @@ void autonomous() {
 
 void drivercontrol() {
     // Place drive control code here, inside the loop
-    int left_power = 0;
+    double left_power = 0;
+    double right_power = 0;
     
     while (true) {
         while(con.ButtonR1.pressing()) {
-            motor_l1.spin(vex::directionType::fwd);
-            
-            motor_l2.spin(vex::directionType::fwd);
-            
-            
-            
+
+          left_power = con.Axis1.position();
+          right_power = con.Axis2.position();
+
+          leftwheels.spin(vex::directionType::fwd, left_power, velocityUnits::rpm);
+          rightwheels.spin(vex::directionType::fwd, right_power, velocityUnits::rpm);
+          
         }
         
         
