@@ -15,7 +15,8 @@ vex::motor motor_ah2(vex::PORT3, vex::gearSetting::ratio36_1, true);
 
 vex::motor_group leftwheels = motor_group(motor_l1, motor_l2);
 vex::motor_group rightwheels = motor_group(motor_r1, motor_r2);
-
+vex::motor_group arm_grip = motor_group(motor_ah1, motor_ah2);
+vex::motor_group arm_rot = motor_group(motor_as1, motor_as2);
 
 vex::drivetrain dt(leftwheels, rightwheels, 319.1764, 272, vex::distanceUnits::mm);
 
@@ -47,18 +48,32 @@ void drivercontrol() {
     double right_power = 0;
     
     while (true) {
-        while(con.ButtonR1.pressing()) {
+        //while(con.ButtonR1.pressing()) {}
 
-          left_power = con.Axis1.position();
-          right_power = con.Axis2.position();
+        left_power = con.Axis1.position();
+        right_power = con.Axis2.position();
 
-          leftwheels.spin(vex::directionType::fwd, left_power, velocityUnits::rpm);
-          rightwheels.spin(vex::directionType::fwd, right_power, velocityUnits::rpm);
+        leftwheels.spin(vex::directionType::fwd, left_power, velocityUnits::rpm);
+        rightwheels.spin(vex::directionType::fwd, right_power, velocityUnits::rpm);
           
+        //Arm Cube Control
+        if(con.ButtonR1.pressing(){
+            arm_grip.spin(vex::directionType::fwd, 10, velocityUnits::rpm);
         }
         
+        if(con.ButtonR2.pressing(){
+            arm_grip.spin(vex::directionType::rev, 10, velocityUnits::rpm);
+        }
         
+           
+        //Arm Rotation
+        if(con.ButtonL1.pressing(){
+            arm_rot.spin(vex::directionType::fwd, 10, velocityUnits::rpm);
+        }
         
+        if(con.ButtonL2.pressing(){
+            arm_rot.spin(vex::directionType::rev, 10, velocityUnits::rpm);
+        }
         
         // This is the main loop for the driver control.
         // Each time through the loop you should update motor
