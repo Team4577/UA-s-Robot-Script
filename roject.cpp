@@ -48,6 +48,8 @@ vex::motor motor_as2(vex::PORT2, vex::gearSetting::ratio36_1, true);
 vex::motor motor_ah1(vex::PORT19, vex::gearSetting::ratio36_1, false);
 vex::motor motor_ah2(vex::PORT12, vex::gearSetting::ratio36_1, true);
 
+vex::motor motor_ap(vex::PORT1, vex::gearSetting::ratio36_1, false);  
+
 //vex::motor_group leftwheels = motor_group(motor_l1, motor_l2);
 //vex::motor_group rightwheels = motor_group(motor_r1, motor_r2);
 
@@ -55,7 +57,7 @@ vex::motor motor_ah2(vex::PORT12, vex::gearSetting::ratio36_1, true);
 //vex::motor_group rightstrafe = motor_group(motor_r2, motor_l1);
 
 
-vex::drivetrain dt(motor_l1, motor_r1, 319.1764, 272, vex::distanceUnits::mm);
+//vex::drivetrain DT(motor_l1, motor_r1, 319.1764, 272, vex::distanceUnits::mm);
 
 vex::controller con(vex::controllerType::primary);
 
@@ -81,8 +83,8 @@ void autonomous() {
 
 void drivercontrol() {
     // Place drive control code here, inside the loop
-    double left_power = 0;
-    double right_power = 0;
+    double left_power = 0; //Left-power
+    double right_power = 0; //Right-power
 
 
     while (true) {
