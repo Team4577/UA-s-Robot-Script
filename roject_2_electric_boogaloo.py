@@ -67,7 +67,11 @@ void autonomous() {
   motor_al.spinTo(-39*10, vex::rotationUnits::deg);
   wait(2, timeUnits::sec);
   motor_al.spinTo(39*10, vex::rotationUnits::deg);
-  
+  wait(5, timeUnits::sec);  
+  shoulders.spinTo(-90*10, vex::rotationUnits::deg);
+  wait(7, timeUnits::sec);
+  motor_al.spinTo(-39*10, vex::rotationUnits::deg);
+
   
 
   //motor_ap.spinTo(double rotation, rotationUnits units)
@@ -83,7 +87,7 @@ void drivercontrol() {
     double arm_seedh = 0;
     double arm_seedl = 0;
     double as = 10; //shoulders
-    double ah = 175; //intae/hands
+    double ah = 100; //intae/hands
     double al = 50; //raam
 
     motor_as1.setBrake(vex::brakeType::hold);
@@ -140,7 +144,7 @@ void drivercontrol() {
           arm_seedh = 0;
         }
 
-        intae.spin(vex::directionType::fwd, arm_seedh, velocityUnits::rpm);
+        intae.spin(vex::directionType::fwd, arm_seedh, velocityUnits::pct);
 
 
         //raam
