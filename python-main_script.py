@@ -36,18 +36,9 @@ vex::motor motor_ah2(vex::PORT12, vex::gearSetting::ratio36_1, true);
 
 vex::motor motor_ap(vex::PORT1, vex::gearSetting::ratio36_1, false);  
 
-//vex::motor_group leftwheels = motor_group(motor_l1, motor_l2);
-//vex::motor_group rightwheels = motor_group(motor_r1, motor_r2);
 
-//vex::motor_group leftstrafe = motor_group(motor_r1, motor_l2);
-//vex::motor_group rightstrafe = motor_group(motor_r2, motor_l1);
-
-
-//vex::drivetrain DT(motor_l1, motor_r1, 319.1764, 272, vex::distanceUnits::mm);
 
 vex::controller con(vex::controllerType::primary);
-
-//dt.driveFor(vex::directionType::fwd, 100, vex::distanceUnits::cm, 10);
 
 
 //#endregion config_globals
@@ -81,23 +72,6 @@ void drivercontrol() {
 
           motor_l1.spin(vex::directionType::fwd, left_power, velocityUnits::rpm);
           motor_r1.spin(vex::directionType::fwd, right_power, velocityUnits::rpm);
-
-
-          //double power = 100;
-
-          //while (con.ButtonLeft.pressing()) {
-
-          //  leftstrafe.spin(vex::directionType::fwd, power, velocityUnits::rpm);
-          //  rightstrafe.spin(vex::directionType::fwd, -power, velocityUnits::rpm);
-
-          //}
-
-          //while (con.ButtonRight.pressing()) {
-
-          //  leftstrafe.spin(vex::directionType::fwd, -power, velocityUnits::rpm);
-          //  rightstrafe.spin(vex::directionType::fwd, power, velocityUnits::rpm);
-
-          //}
 
         }
         
@@ -155,17 +129,3 @@ int main() {
 }
 
 
-
-//int main() {
-    // Do not adjust the lines below
-
-    // Set up (but don't start) callbacks for autonomous and driver control periods.
-    //Competition.autonomous(autonomous);
-    //Competition.drivercontrol(drivercontrol);
-
-    // Run the pre-autonomous function.
-    //pre_auton();
-
-    // Robot Mesh Studio runtime continues to run until all threads and
-    // competition callbacks are finished.
-//}
