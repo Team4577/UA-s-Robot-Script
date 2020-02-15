@@ -34,9 +34,10 @@ vex::motor motor_as2(vex::PORT2, vex::gearSetting::ratio36_1, true);
 vex::motor motor_ah1(vex::PORT19, vex::gearSetting::ratio36_1, false);
 vex::motor motor_ah2(vex::PORT12, vex::gearSetting::ratio36_1, true);
 
-vex::motor motor_ap(vex::PORT1, vex::gearSetting::ratio36_1, false);  
+vex::motor motor_al(vex::PORT1, vex::gearSetting::ratio36_1, false);  
 
-
+vex::motor_group shoulders = motor_group(motor_as1, motor_as2);
+vex::motor_group intae = motor_group(motor_ah1, motor_ah2);
 
 vex::controller con(vex::controllerType::primary);
 
@@ -51,14 +52,24 @@ vex::competition Competition;
 void pre_auton() {
     // All activities that occur before competition start
     // Example: setting initial positions
+    
 
 }
 
 void autonomous() {
   motor_as1.setBrake(vex::brakeType::hold);
   motor_as2.setBrake(vex::brakeType::hold);
-  motor_as1.spinTo(90, vex::rotationUnits::deg);
-  motor_as2.spinTo(90, vex::rotationUnits::deg);
+
+  shoulders.spinTo(90*10, vex::rotationUnits::deg);
+  wait(2, timeUnits::sec);
+  motor_al.spinTo(39*10, vex::rotationUnits::deg);
+  wait(2, timeUnits::sec);
+  motor_al.spinTo(-39*10, vex::rotationUnits::deg);
+  wait(2, timeUnits::sec);
+  motor_al.spinTo(39*10, vex::rotationUnits::deg);
+  
+  
+
   //motor_ap.spinTo(double rotation, rotationUnits units)
 
 
@@ -70,11 +81,15 @@ void drivercontrol() {
     double right_power = 0; //Right-power
     double arm_seeds = 0;
     double arm_seedh = 0;
+    double arm_seedl = 0;
     double as = 10; //shoulders
-    double ah = 100; //intae/hands
+    double ah = 175; //intae/hands
+    double al = 50; //raam
 
-      motor_as1.setBrake(vex::brakeType::hold);
-  motor_as2.setBrake(vex::brakeType::hold);
+    motor_as1.setBrake(vex::brakeType::hold);
+    motor_as2.setBrake(vex::brakeType::hold);
+    motor_al.setBrake(vex::brakeType::hold);
+
 
     while (true) {
 
@@ -96,34 +111,52 @@ void drivercontrol() {
 
         
 
-        //joystick is being wasted on forward/backward movement
+        //Shoulders
         if (con.ButtonL1.pressing()) {
           arm_seeds = as;
         }
         else if (con.ButtonL2.pressing()) {
           arm_seeds = -as;
         }
+
+
         if(!con.ButtonL1.pressing() and !con.ButtonL2.pressing()){
           arm_seeds = 0;
         }
 
-        motor_as1.spin(vex::directionType::fwd, arm_seeds, velocityUnits::rpm);
-        motor_as2.spin(vex::directionType::fwd, arm_seeds, velocityUnits::rpm);
+        shoulders.spin(vex::directionType::fwd, arm_seeds, velocityUnits::rpm);
 
 
         //Intae/hands
-        if (con.ButtonR1.pressing()) {
-          arm_seedh = ah;
+        if (con.ButtonR2.pressing()) {
+        arm_seedh = ah;
         }
-        else if (con.ButtonR2.pressing()) {
+        else if (con.ButtonR1.pressing()) {
           arm_seedh = -ah;
         }
+
+
         if (!con.ButtonR1.pressing() and !con.ButtonR2.pressing()){
           arm_seedh = 0;
         }
 
-        motor_ah1.spin(vex::directionType::fwd, arm_seedh, velocityUnits::rpm);
-        motor_ah2.spin(vex::directionType::fwd, arm_seedh, velocityUnits::rpm);
+        intae.spin(vex::directionType::fwd, arm_seedh, velocityUnits::rpm);
+
+
+        //raam
+        if (con.ButtonX.pressing()) {
+          arm_seedl = al;
+        }
+        else if (con.ButtonA.pressing()) {
+          arm_seedl = -al;
+        }
+
+
+        if (!con.ButtonA.pressing() and !con.ButtonX.pressing()){
+          arm_seedl = 0;
+        }
+
+        motor_al.spin(vex::directionType::fwd, arm_seedl, vex::velocityUnits::pct);
 
     }
     
