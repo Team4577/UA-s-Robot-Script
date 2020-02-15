@@ -24,7 +24,7 @@ using namespace vex;
 
 
 //#region config_globals
-vex::brain Brain;
+//vex::brain Brain;
 vex::motor motor_l1(vex::PORT20, vex::gearSetting::ratio18_1, false);
 vex::motor motor_r1(vex::PORT11, vex::gearSetting::ratio18_1, true);
 vex::motor motor_l2(vex::PORT10, vex::gearSetting::ratio18_1, false);
@@ -54,7 +54,9 @@ void pre_auton() {
 }
 
 void autonomous() {
-    // Place autonomous code here
+  motor_as1.spinTo(90, vex::rotationUnits::deg);
+  motor_as2.spinTo(90, vex::rotationUnits::deg);
+
 
 }
 
@@ -62,48 +64,55 @@ void drivercontrol() {
     // Place drive control code here, inside the loop
     double left_power = 0; //Left-power
     double right_power = 0; //Right-power
-
+    double arm_seeds = 0;
+    double arm_seedh = 0;
 
     while (true) {
-        while(con.ButtonR1.pressing()) {
 
-          left_power = con.Axis3.position();
-          right_power = con.Axis2.position();
+        left_power = con.Axis3.position();
+        right_power = con.Axis2.position();
 
-          motor_l1.spin(vex::directionType::fwd, left_power, velocityUnits::rpm);
-          motor_r1.spin(vex::directionType::fwd, right_power, velocityUnits::rpm);
-
-        }
-        
-        left_power = 0;
-        right_power = 0;
         motor_l1.spin(vex::directionType::fwd, left_power, velocityUnits::rpm);
         motor_r1.spin(vex::directionType::fwd, right_power, velocityUnits::rpm);
+        
+        
 
         // This is the main loop for the driver control.
         // Each time through the loop you should update motor
         // movements based on input from the controller.
         
+
+
         
-        
+
         //joystick is being wasted on forward/backward movement
-         if (con.ButtonUp.pressing()) {
-        motor_as1.spin(vex::directionType::fwd, 100, velocityUnits::rpm);
-        motor_as2.spin(vex::directionType::fwd, 100, velocityUnits::rpm);
-    }
-    
-    if (con.ButtonDown.pressing()) {
-        motor_as1.spin(vex::directionType::rev, 100, velocityUnits::rpm);
-        motor_as2.spin(vex::directionType::rev, 100, velocityUnits::rpm);
-    }
-    if (con.ButtonA.pressing()) {
-        motor_ah1.spin(vex::directionType::fwd, 100, velocityUnits::rpm);
-    motor_ah2.spin(vex::directionType::fwd, 100, velocityUnits::rpm);
-    }
-     if (con.ButtonY.pressing()) {
-        motor_ah1.spin(vex::directionType::rev, 100, velocityUnits::rpm);
-    motor_ah2.spin(vex::directionType::rev, 100, velocityUnits::rpm);
-    }
+        if (con.ButtonUp.pressing()) {
+          arm_seedh = 100;
+        }
+        else if (con.ButtonDown.pressing()) {
+          arm_seeds = -100;
+        }
+        if(!con.ButtonUp.pressing() and !con.ButtonDown.pressing()){
+          arm_seeds = 0;
+        }
+
+        motor_as1.spin(vex::directionType::fwd, arm_seeds, velocityUnits::rpm);
+        motor_as2.spin(vex::directionType::fwd, arm_seeds, velocityUnits::rpm);
+
+
+
+        if (con.ButtonA.pressing()) {
+          arm_seedh = 100;
+        }
+        else if (con.ButtonY.pressing()) {
+          arm_seedh = -100;
+        }
+        if (!con.ButtonA.pressing() and !con.ButtonY.pressing()){
+          arm_seedh = 0;
+        }
+
+        motor_ah1.spin(vex::directionType::fwd, arm_seedh, velocityUnits::rpm);
+        motor_ah2.spin(vex::directionType::fwd, arm_seedh, velocityUnits::rpm);
 
     }
     
