@@ -41,6 +41,7 @@ vex::motor motor_ap(vex::PORT1, vex::gearSetting::ratio36_1, false);
 vex::controller con(vex::controllerType::primary);
 
 
+
 //#endregion config_globals
 
 
@@ -54,8 +55,11 @@ void pre_auton() {
 }
 
 void autonomous() {
+  motor_as1.setBrake(vex::brakeType::hold);
+  motor_as2.setBrake(vex::brakeType::hold);
   motor_as1.spinTo(90, vex::rotationUnits::deg);
   motor_as2.spinTo(90, vex::rotationUnits::deg);
+  //motor_ap.spinTo(double rotation, rotationUnits units)
 
 
 }
@@ -66,6 +70,11 @@ void drivercontrol() {
     double right_power = 0; //Right-power
     double arm_seeds = 0;
     double arm_seedh = 0;
+    double as = 10; //shoulders
+    double ah = 100; //intae/hands
+
+      motor_as1.setBrake(vex::brakeType::hold);
+  motor_as2.setBrake(vex::brakeType::hold);
 
     while (true) {
 
@@ -75,7 +84,7 @@ void drivercontrol() {
         motor_l1.spin(vex::directionType::fwd, left_power, velocityUnits::rpm);
         motor_r1.spin(vex::directionType::fwd, right_power, velocityUnits::rpm);
         
-        
+
 
         // This is the main loop for the driver control.
         // Each time through the loop you should update motor
@@ -83,16 +92,18 @@ void drivercontrol() {
         
 
 
+
+
         
 
         //joystick is being wasted on forward/backward movement
-        if (con.ButtonUp.pressing()) {
-          arm_seedh = 100;
+        if (con.ButtonL1.pressing()) {
+          arm_seeds = as;
         }
-        else if (con.ButtonDown.pressing()) {
-          arm_seeds = -100;
+        else if (con.ButtonL2.pressing()) {
+          arm_seeds = -as;
         }
-        if(!con.ButtonUp.pressing() and !con.ButtonDown.pressing()){
+        if(!con.ButtonL1.pressing() and !con.ButtonL2.pressing()){
           arm_seeds = 0;
         }
 
@@ -100,14 +111,14 @@ void drivercontrol() {
         motor_as2.spin(vex::directionType::fwd, arm_seeds, velocityUnits::rpm);
 
 
-
-        if (con.ButtonA.pressing()) {
-          arm_seedh = 100;
+        //Intae/hands
+        if (con.ButtonR1.pressing()) {
+          arm_seedh = ah;
         }
-        else if (con.ButtonY.pressing()) {
-          arm_seedh = -100;
+        else if (con.ButtonR2.pressing()) {
+          arm_seedh = -ah;
         }
-        if (!con.ButtonA.pressing() and !con.ButtonY.pressing()){
+        if (!con.ButtonR1.pressing() and !con.ButtonR2.pressing()){
           arm_seedh = 0;
         }
 
