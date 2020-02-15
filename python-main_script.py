@@ -1,101 +1,171 @@
-# Python Project
-import sys
-import vex
-from vex import *
+// To complete the VEXcode V5 Text project upgrade process, please follow the
+// steps below.
+// 
+// 1. You can use the Robot Configuration window to recreate your V5 devices
+//   - including any motors, sensors, 3-wire devices, and controllers.
+// 
+// 2. All previous code located in main.cpp has now been commented out. You
+//   will need to migrate this code to the new "int main" structure created
+//   below and keep in mind any new device names you may have set from the
+//   Robot Configuration window. 
+// 
+// If you would like to go back to your original project, a complete backup
+// of your original (pre-upgraded) project was created in a backup folder
+// inside of this project's folder.
 
-#region config
-brain   = vex.Brain()
-motor_1 = vex.Motor(vex.Ports.PORT20, vex.GearSetting.RATIO18_1, False)
-motor_2 = vex.Motor(vex.Ports.PORT11, vex.GearSetting.RATIO18_1, True)
-motor_3 = vex.Motor(vex.Ports.PORT19, vex.GearSetting.RATIO36_1, False)
-motor_4 = vex.Motor(vex.Ports.PORT12, vex.GearSetting.RATIO36_1, False)
-dt      = vex.Drivetrain(motor_1, motor_2, 319.1764, 272, vex.DistanceUnits.MM) #INTIALIZE DRIVE
-con     = vex.Controller(vex.ControllerType.PRIMARY)
-#endregion config
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// ---- END VEXCODE CONFIGURED DEVICES ----
 
-FWD = DirectionType.FWD
+#include "vex.h"
 
-#T-Pose to asset dominance
-brain.screen.draw_rectangle(215,141,16,100) #RLeg
-brain.screen.draw_rectangle(231,141,16,100) #LLeg
-brain.screen.draw_rectangle(50, 50, 170, 17) #RArm
-brain.screen.draw_rectangle(242, 50, 170, 17) #LArm
-brain.screen.draw_circle(230,25,25) #head
-brain.screen.draw_rectangle(216,50,30,100) #body
+using namespace vex;
 
 
-def forward_for(distance, velo):
-    global dt
-    dt.drive_for(FWD, distance, vex.DistanceUnits.CM, velo)
-    
-def forward(velo):
-    global dt
-    dt.drive(FWD, velo)
-
-forward_for(10, 10)
-
-#brain.screen.set_font(vex.Font.MONO_40)
-#for count in range(4):
-#  brain.screen.print_line(1, 'Forward')
-#  
-#  sys.sleep(1)
-#  brain.screen.print_line(1, 'Turn Left')
-#  dt.turn_for(vex.TurnType.LEFT, 90, vex.RotationUnits.DEG)
-#  sys.sleep(1) 
-#brain.screen.print_line(1, 'Finished')
 
 
-#CONTROLLER REGION -------START
+//#region config_globals
+vex::brain Brain;
+vex::motor motor_l1(vex::PORT20, vex::gearSetting::ratio18_1, false);
+vex::motor motor_r1(vex::PORT11, vex::gearSetting::ratio18_1, true);
+vex::motor motor_l2(vex::PORT10, vex::gearSetting::ratio18_1, false);
+vex::motor motor_r2(vex::PORT1, vex::gearSetting::ratio18_1, true);
+vex::motor motor_as1(vex::PORT9, vex::gearSetting::ratio36_1, false);
+vex::motor motor_as2(vex::PORT2, vex::gearSetting::ratio36_1, true);
+vex::motor motor_ah1(vex::PORT19, vex::gearSetting::ratio36_1, false);
+vex::motor motor_ah2(vex::PORT12, vex::gearSetting::ratio36_1, true);
 
-while True:
+vex::motor motor_ap(vex::PORT1, vex::gearSetting::ratio36_1, false);  
+
+//vex::motor_group leftwheels = motor_group(motor_l1, motor_l2);
+//vex::motor_group rightwheels = motor_group(motor_r1, motor_r2);
+
+//vex::motor_group leftstrafe = motor_group(motor_r1, motor_l2);
+//vex::motor_group rightstrafe = motor_group(motor_r2, motor_l1);
+
+
+//vex::drivetrain DT(motor_l1, motor_r1, 319.1764, 272, vex::distanceUnits::mm);
+
+vex::controller con(vex::controllerType::primary);
+
+//dt.driveFor(vex::directionType::fwd, 100, vex::distanceUnits::cm, 10);
+
+
+//#endregion config_globals
+
+
+// Creates a competition object that allows access to Competition methods.
+vex::competition Competition;
+
+void pre_auton() {
+    // All activities that occur before competition start
+    // Example: setting initial positions
+
+}
+
+void autonomous() {
+    // Place autonomous code here
+
+}
+
+void drivercontrol() {
+    // Place drive control code here, inside the loop
+    double left_power = 0; //Left-power
+    double right_power = 0; //Right-power
+
+
+    while (true) {
+        while(con.ButtonR1.pressing()) {
+
+          left_power = con.Axis3.position();
+          right_power = con.Axis2.position();
+
+          motor_l1.spin(vex::directionType::fwd, left_power, velocityUnits::rpm);
+          motor_r1.spin(vex::directionType::fwd, right_power, velocityUnits::rpm);
+
+
+          //double power = 100;
+
+          //while (con.ButtonLeft.pressing()) {
+
+          //  leftstrafe.spin(vex::directionType::fwd, power, velocityUnits::rpm);
+          //  rightstrafe.spin(vex::directionType::fwd, -power, velocityUnits::rpm);
+
+          //}
+
+          //while (con.ButtonRight.pressing()) {
+
+          //  leftstrafe.spin(vex::directionType::fwd, -power, velocityUnits::rpm);
+          //  rightstrafe.spin(vex::directionType::fwd, power, velocityUnits::rpm);
+
+          //}
+
+        }
+        
+        left_power = 0;
+        right_power = 0;
+        motor_l1.spin(vex::directionType::fwd, left_power, velocityUnits::rpm);
+        motor_r1.spin(vex::directionType::fwd, right_power, velocityUnits::rpm);
+
+        // This is the main loop for the driver control.
+        // Each time through the loop you should update motor
+        // movements based on input from the controller.
+        
+        
+        
+        //joystick is being wasted on forward/backward movement
+         if (con.ButtonUp.pressing()) {
+        motor_as1.spin(vex::directionType::fwd, 100, velocityUnits::rpm);
+        motor_as2.spin(vex::directionType::fwd, 100, velocityUnits::rpm);
+    }
     
-    con.set_deadband(5)
+    if (con.ButtonDown.pressing()) {
+        motor_as1.spin(vex::directionType::rev, 100, velocityUnits::rpm);
+        motor_as2.spin(vex::directionType::rev, 100, velocityUnits::rpm);
+    }
+    if (con.ButtonA.pressing()) {
+        motor_ah1.spin(vex::directionType::fwd, 100, velocityUnits::rpm);
+    motor_ah2.spin(vex::directionType::fwd, 100, velocityUnits::rpm);
+    }
+     if (con.ButtonY.pressing()) {
+        motor_ah1.spin(vex::directionType::rev, 100, velocityUnits::rpm);
+    motor_ah2.spin(vex::directionType::rev, 100, velocityUnits::rpm);
+    }
+
+    }
     
-    buttonr1_pressed = False
-    motor_5_running = 0
-    
-    while con.buttonR1.pressing():
-    
-    
-    #region actions
-    	motor_1_power = 0
-    	motor_2_power = 0
-    	motor_3_power = 0
-    	motor_4_power = 0
-    	motor_5_power = 0
-    	
-    	# axis1: Linear Control
-    	power = con.axis1.position()
-    	 
-    	if power != 0:
-    		motor_1_power = power
-    	
-    	# axis2: Linear Control
-    	power = con.axis2.position()
-    	if power != 0:
-    		motor_2_power = power
-    	
-    	# buttonL1: Forward
-    	if con.buttonL1.pressing():
-    		motor_3_power = 100
-    	
-    	# buttonL2: Reverse
-    	if con.buttonL2.pressing():
-    		motor_4_power = -100
-    	
-    
-    	
-    	motor_1.spin(vex.DirectionType.FWD, motor_1_power)
-    	motor_2.spin(vex.DirectionType.FWD, motor_2_power)
-    	motor_3.spin(vex.DirectionType.FWD, motor_3_power)
-    	motor_4.spin(vex.DirectionType.FWD, motor_4_power)
-    
-    #endregion actions
+   
     
     
-    while not con.buttonR1.pressing():
-        motor_1_power = 0
-    	motor_2_power = 0
-    	motor_3_power = 0
-    	motor_4_power = 0
-    	motor_5_power = 0
+    
+    
+}
+
+int main() {
+    // Do not adjust the lines below
+
+    // Set up (but don't start) callbacks for autonomous and driver control periods.
+    Competition.autonomous(autonomous);
+    Competition.drivercontrol(drivercontrol);
+
+    // Run the pre-autonomous function.
+    pre_auton();
+
+    // Robot Mesh Studio runtime continues to run until all threads and
+    // competition callbacks are finished.
+}
+
+
+
+//int main() {
+    // Do not adjust the lines below
+
+    // Set up (but don't start) callbacks for autonomous and driver control periods.
+    //Competition.autonomous(autonomous);
+    //Competition.drivercontrol(drivercontrol);
+
+    // Run the pre-autonomous function.
+    //pre_auton();
+
+    // Robot Mesh Studio runtime continues to run until all threads and
+    // competition callbacks are finished.
+//}
