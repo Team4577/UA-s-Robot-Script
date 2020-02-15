@@ -151,12 +151,12 @@ void drivercontrol() {
         if (con.ButtonX.pressing()) {
           arm_seedl = al;
         }
-        else if (con.ButtonA.pressing()) {
+        else if (con.ButtonB.pressing()) {
           arm_seedl = -al;
         }
 
 
-        if (!con.ButtonA.pressing() and !con.ButtonX.pressing()){
+        if (!con.ButtonB.pressing() and !con.ButtonX.pressing()){
           arm_seedl = 0;
         }
 
